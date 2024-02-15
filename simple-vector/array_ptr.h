@@ -30,6 +30,20 @@ public:
     // Запрещаем копирование
     ArrayPtr(const ArrayPtr&) = delete;
 
+    ArrayPtr(ArrayPtr&& other)
+        : raw_ptr_(other.raw_ptr_)
+    {
+
+    }
+
+    ArrayPtr& operator=(ArrayPtr&& other) {
+        if (this != &other) {
+            delete[] raw_ptr_;
+            raw_ptr_ = other.Release();
+        }
+        return *this;
+    }
+
     ~ArrayPtr() {
         delete[] raw_ptr_;
     }
@@ -76,4 +90,3 @@ public:
 private:
     Type* raw_ptr_ = nullptr;
 };
-
